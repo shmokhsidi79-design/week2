@@ -57,9 +57,7 @@ def iqr_bounds(
     s: pd.Series,
     k: float = 1.5
 ) -> tuple[float, float]:
-    """
-    Calculate IQR lower and upper bounds.
-    """
+    
     q1 = s.quantile(0.25)
     q3 = s.quantile(0.75)
     iqr = q3 - q1
@@ -73,10 +71,8 @@ def winsorize(
     lo: float = 0.01,
     hi: float = 0.99
 ) -> pd.Series:
-    """
-    Cap values at given percentiles.
-    """
-    lower = s.quantile(lo)
+ 
+    s.quantile(lo)
     upper = s.quantile(hi)
 
     return s.clip(lower=lower, upper=upper)
@@ -86,9 +82,7 @@ def add_outlier_flag(
     *,
     k: float = 1.5
 ) -> pd.DataFrame:
-    """
-    Add boolean flag for IQR outliers.
-    """
+   
     lower, upper = iqr_bounds(df[col], k=k)
 
     return df.assign(
