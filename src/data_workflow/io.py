@@ -1,15 +1,22 @@
 from pathlib import Path
 import pandas as pd
 
-NA = ["", "NA", "N/A", "null", "None"]
+missing1values = ["", " ", "na", "n/a", "null", "none", "nan"] #القيم المفقودة عشان نقدر ننظف البيانات بسكل ارتب
 
-def read_orders(path: Path) -> pd.DataFrame:
-    return pd.read_csv(
-        path,dtype={"order_id": "string", "user_id": "string"},
-        na_values=NA,
-        keep_default_na=True,
-    )
 
-def parquet(df: pd.DataFrame, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(path, index=False)
+def read1orders(path)->pd.DataFrame: 
+    return pd.read_csv(path)
+
+def read1users(path)-> pd.DataFrame:
+    return pd.read_csv(path)
+
+
+
+def write1parquet(df,path):
+    path1= path.parent
+    path1.mkdir(parents=True, exist_ok=True)
+    df.to_parquet(path,index=False)
+
+def read1parquet(path) -> pd.DataFrame:
+  return pd.read_parquet(path)
+
