@@ -96,3 +96,32 @@ data/processed/orders_clean.parquet
 run:
 python scripts/run_day2_clean.py
 
+#Day3 
+
+In this day, we prepare the dataset for analytics with:
+- converting timestamp columns to  datetimes
+- creating time-based features ( date, year, month, day of week, hour)
+- handling numeric outliers using IQR bounds and winsorization
+
+#we did this
+
+    Load cleaned data
+   - Reads from `orders_clean.parquet` from `data/processed/`.
+    Parse datetime
+   - Converts `created_at` into a pandas datetime type using safe parsing (`errors="coerce"`).
+   - Invalid timestamps become `NaT` instead of crashing the script.
+    Add time parts
+    Creates additional time columns from `created_at`, such as:
+     - `date`, `year`, `month`, `dow`, `hour`
+
+ Outlier bounds (IQR)**
+   Winsorize numeric values
+   - Caps extreme values instead of dropping rows.
+   - Uses quantile-based limits ( default: 1% and 99%).
+
+---
+
+run
+python scripts/run_day3_load.py
+
+
