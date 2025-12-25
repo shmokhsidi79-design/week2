@@ -1,0 +1,21 @@
+{
+  "rows": {
+    "orders_clean": 5,
+    "users_clean": 4,
+    "analytics_table": 5
+  },
+  "missing_timestamps": {
+    "orders.created_at": 1
+  },
+  "join_match_rate": {
+    "country_non_null_rate": 1.0
+  },
+  "config_paths": {
+    "raw_orders": "C:\\Users\\acer\\OneDrive\\\u0633\u0637\u062d \u0627\u0644\u0645\u0643\u062a\u0628\\week2project\\week2pro\\data\\raw\\orders.csv",
+    "raw_users": "C:\\Users\\acer\\OneDrive\\\u0633\u0637\u062d \u0627\u0644\u0645\u0643\u062a\u0628\\week2project\\week2pro\\data\\raw\\users.csv",
+    "orders_clean": "C:\\Users\\acer\\OneDrive\\\u0633\u0637\u062d \u0627\u0644\u0645\u0643\u062a\u0628\\week2project\\week2pro\\data\\processed\\orders_clean.parquet",
+    "users_clean": "C:\\Users\\acer\\OneDrive\\\u0633\u0637\u062d \u0627\u0644\u0645\u0643\u062a\u0628\\week2project\\week2pro\\data\\processed\\users.parquet",
+    "analytics_table": "C:\\Users\\acer\\OneDrive\\\u0633\u0637\u062d \u0627\u0644\u0645\u0643\u062a\u0628\\week2project\\week2pro\\data\\processed\\analytics_table.parquet",
+    "run_meta": "C:\\Users\\acer\\OneDrive\\\u0633\u0637\u062d \u0627\u0644\u0645\u0643\u062a\u0628\\week2project\\week2pro\\data\\processed\\run_meta.json"
+  }
+}
