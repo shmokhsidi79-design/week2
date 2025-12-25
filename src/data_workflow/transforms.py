@@ -49,3 +49,36 @@ def dedupe_keep_latest(df:pd.DataFrame, key_cols, ts_col) -> pd.DataFrame:
     dedupe = dedupe.drop_duplicates(subset=key_cols, keep="last")
     dedupe = dedupe.reset_index(drop=True)
     return dedupe
+
+#هنا نحول النص لتاريخ 
+def parse_datetime(df: pd.DataFrame, col: str, *, utc: bool = True) -> pd.DataFrame:
+    datetime1 = pd.to_datetime(df[col], errors="coerce", utc=utc)
+    return df.assign(**{col: datetime1})
+
+
+def add_time_parts(df: pd.DataFrame, time1) -> pd.DataFrame:
+    datetotime2 = df[time1]
+
+    return df.assign(
+        date=datetotime2.dt.date,
+        year=datetotime2.dt.year,
+        month=datetotime2.dt.month,
+        dow=datetotime2.dt.dayofweek,
+        hour=datetotime2.dt.hour
+    )
+
+def iqr_bounds(s: pd.Series, k: float = 1.5):
+    x = s.dropna()
+    x2 = x.quantile(0.25)
+    x3 = x.quantile(0.75)
+    iqr = (x3 - x2)
+    low = (x2 - k) * iqr
+    up = (x3 + k) * iqr
+    return low, up
+
+
+def winsorize(s: pd.Series, lo1: float = 0.01, hi1: float = 0.99) -> pd.Series:
+    x = s.dropna()
+    lo1 = x.quantile(lo1)
+    hi1 = x.quantile(hi1)
+    return s.clip(lower=lo1, upper=hi1)

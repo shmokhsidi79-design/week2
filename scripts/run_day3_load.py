@@ -1,50 +1,17 @@
 import pandas as pd
-def main():
-   
-    orders = pd.read_parquet("data/orders_clean.parquet")
-    users = pd.read_parquet("data/users.parquet")
+from pathlib import Path
+import sys
 
-   
-    required_order_cols = {"order_id", "user_id", "created_at", "amount"}
-    required_user_cols = {"user_id"}
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.append(str(ROOT / "src"))
 
-    if not required_order_cols.issubset(orders.columns):
-        raise ValueError("orders_clean missing required columns")
+from data_workflow.transforms import iqr_bounds, winsorize
 
-    if not required_user_cols.issubset(users.columns):
-        raise ValueError("users missing required columns")
+orders = pd.read_parquet("data/processed/orders_clean.parquet")
 
-    if not users["user_id"].is_unique:
-        raise ValueError("users.user_id must be unique")
+lo, hi = iqr_bounds(orders["amount"])
+print("IQR bounds:", lo, hi)
 
-    
-    orders = parse_datetime(orders, "created_at", utc=True)
-    orders = add_time_parts(orders, "created_at")
-
-   
-    analytics = safe_left_join(
-        orders,
-        users,
-        on="user_id",
-        validate="many_to_one",
-    )
-
-   
-    analytics = analytics.assign(
-        amount_winsorized=winsorize(analytics["amount"])
-    )
-
-    analytics = add_outlier_flag(
-        analytics,
-        col="amount"
-    )
-
- 
-    analytics.to_parquet(
-        "data/analytics_table.parquet",
-        index=False
-    )
-
-
-if __name__ == "__main__":
-    main()
+w = winsorize(orders["amount"])
+print("Winsorized head:")
+print(w.head())
