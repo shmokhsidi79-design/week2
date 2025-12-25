@@ -52,7 +52,7 @@ def main():
 
     log.info("missing created_at: %s", orders["created_at"].isna().sum())
 
-    # ---- join ----
+   
     joined = safe_left_join(
         orders,
         users,
