@@ -125,3 +125,80 @@ run
 python scripts/run_day3_load.py
 
 
+#Day 4
+
+This notebook focuses on exploratory data analysis.  
+The goal is to understand the data structure, explore key patterns, and generate visual insights.
+
+
+ 1. Data Loading & Audit
+- Loaded `analytics_table.parquet`
+- Checked:
+  - Row count
+  - Column data types
+  - Missing values per column
+
+
+
+2. Key Questions
+
+The following analytical questions were explored:
+
+1. How does total revenue change over time?
+2. How does revenue differ by country?
+3. What is the distribution of order amounts (winsorized)?
+4. Is the refund rate different across countries?
+
+Each question is supported by:
+- A table
+- A visualization
+- Short interpretation
+
+
+- Aggregated revenue by month.
+- Created a line chart showing revenue trends over time.
+- Observed variations across months indicating changing activity levels.
+
+📊 Output:
+- `reports/figures/revenue_trend_monthly.png`
+
+ 4. Revenue by Country
+- Grouped data by country.
+- Computed total revenue and number of orders.
+- Visualized results using a bar chart.
+
+📊 Output:
+- `reports/figures/revenue_by_country.png`
+
+---
+ 5. Distribution of Order Amounts
+- Used winsorized order values to reduce outlier impact.
+- Plotted a histogram to visualize typical order behavior.
+
+📊 Output:
+- `reports/figures/amount_hist_winsor.png`
+
+
+6. Refund Rate Comparison (Bootstrap)
+- Compared refund rates between two countries using bootstrap sampling.
+- Computed:
+  - Mean difference
+  - 95% confidence interval
+- Result showed small differences with overlapping confidence intervals.
+
+---
+
+7. Key Findings
+- Revenue varies across time and countries.
+- A small number of countries contribute a large share of total revenue.
+- Order values are right-skewed; winsorization helps stabilize analysis.
+- Refund rate differences are small and not statistically significant.
+
+---
+
+8. Caveats
+- Some countries have limited observations.
+- Results are based on historical data only.
+- Bootstrap confidence intervals do not imply causality.
+
+
