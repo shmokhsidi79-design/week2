@@ -4,7 +4,7 @@ import pandas as pd
 def normalize1text(series: pd.Series) -> pd.Series:  #دالة عشان تفهم الكلمة بنفس المعنى مايفرق هي كابيتل او سمول ليترز
     s=series.astype(str)
     s=s.str.strip()
-    s=s.str.lower()
+    s=s.str.casefold()
     return s
     
 
@@ -15,20 +15,6 @@ def into_number(series:pd.Series) -> pd.Series: #تحويل العامود لر�
 def into_datetime(series: pd.Series, *, utc: bool = True) -> pd.Series: #يحول العامود لتاريخ
     return pd.to_datetime(series, errors="coerce", utc=utc)
 
-def assert1range(series:pd.Series,*,lo=0,hi=None,name="value"):
-    s = series.dropna()
-    if lo is not None:
-        not_good= s < lo
-    if not_good.any():
-         test = s[not_good].head(7).tolist()
-         raise ValueError(f"{name} has values below {lo}")
-
-    if hi is not None:
-        not_good = s > hi
-        if not_good.any():
-             test = s[not_good].head(5).tolist()
-             raise ValueError(f"{name} has values above {hi}")
-        
 
 def enforce_schema(df: pd.DataFrame) -> pd.DataFrame:
     return df.assign(
@@ -39,3 +25,27 @@ def enforce_schema(df: pd.DataFrame) -> pd.DataFrame:
         created_at=pd.to_datetime(df["created_at"], errors="coerce", utc=True),
         status=df["status"].astype("string")
     )
+
+ 
+def missingness_report(df: pd.DataFrame) -> pd.DataFrame:
+    total1 = len(df)
+    missing1count = df.isna().sum()
+    missing1pct = (missing1count / total1) * 100 if total1 else 0
+
+    out = pd.DataFrame({
+        "column": missing1count.index,
+        "missing_count": missing1count.values,
+        "missing_pct": missing1pct.values if hasattr(missing1pct, "values") else missing1pct,
+    })
+
+    return out.sort_values(["missing_count", "column"], ascending=[False, True]).reset_index(drop=True)
+
+def add_missing_flags(df: pd.DataFrame, cols) -> pd.DataFrame:
+     miising_flags = {f"{c}__isna": df[c].isna() for c in cols}
+     return df.assign(**miising_flags)
+
+def dedupe_keep_latest(df:pd.DataFrame, key_cols, ts_col) -> pd.DataFrame:
+    dedupe = df.sort_values(ts_col)
+    dedupe = dedupe.drop_duplicates(subset=key_cols, keep="last")
+    dedupe = dedupe.reset_index(drop=True)
+    return dedupe
