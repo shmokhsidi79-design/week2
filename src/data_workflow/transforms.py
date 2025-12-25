@@ -56,14 +56,14 @@ def parse_datetime(df: pd.DataFrame, col: str, *, utc: bool = True) -> pd.DataFr
     return df.assign(**{col: datetime1})
 
 
-def add_time_parts(df: pd.DataFrame, time1) -> pd.DataFrame:
-    datetotime2 = df[time1]
+def add_time_parts(df: pd.DataFrame, ts_col: str) -> pd.DataFrame:
+    datetotime2 = df[ts_col]
 
     return df.assign(
         date=datetotime2.dt.date,
         year=datetotime2.dt.year,
-        month=datetotime2.dt.month,
-        dow=datetotime2.dt.dayofweek,
+        month=datetotime2.dt.strftime("%Y-%m").astype("string"),
+        dow=datetotime2.dt.day_name(),
         hour=datetotime2.dt.hour
     )
 
